@@ -1,0 +1,7 @@
+{
+  "name": "importer",
+  "version": "0.1.0",
+  "dependencies": {
+    "xlsx": "^0.16.6"
+  }
+}

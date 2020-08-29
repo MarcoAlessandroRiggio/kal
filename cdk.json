@@ -1,5 +1,5 @@
 {
-  "app": "npx ts-node bin/kal.ts",
+  "app": "npx ts-node bin/kal-stack.ts",
   "context": {
     "@aws-cdk/core:enableStackNameDuplicates": "true",
     "aws-cdk:enableDiffNoFail": "true"

@@ -1,6 +1,6 @@
 import { expect as expectCDK, matchTemplate, MatchStyle } from '@aws-cdk/assert';
 import * as cdk from '@aws-cdk/core';
-import * as Kal from '../lib/kal-stack';
+import * as Kal from '../bin/kal-stack';
 
 test('Empty Stack', () => {
     const app = new cdk.App();

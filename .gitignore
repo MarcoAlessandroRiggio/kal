@@ -1,11 +1,13 @@
-*.js
+
+.idea
 !jest.config.js
 *.d.ts
 node_modules
-
+*.zip
 # CDK asset staging directory
 .cdk.staging
 cdk.out
-
 # Parcel default cache directory
 .parcel-cache
+/package-lock.json
+/lambda/importer/package-lock.json
