@@ -1,7 +1,7 @@
 import * as cdk from '@aws-cdk/core';
 
 import {Exercise} from "./Exercise";
-import {Players} from "./Players";
+import {SimpleTable} from "./SimpleTable";
 import {ToBeProcessed} from "./ToBeProcessed";
 import {TestUploader} from "./TestUploader";
 
@@ -10,17 +10,23 @@ export class KalStack extends cdk.Stack {
     super(scope, id, props);
     const prefix = "dev";
 
-    new Exercise(this, "tableOfTests", {
-      prefix: prefix, name: "Tests", downstream: [], upStream: []
-    });
-
-    new Players(this, "tableOfPlayers", {
-      prefix: prefix, name: "Players"
-    });
-
     const testUploader = new TestUploader(this, "testUploader", {
       prefix: prefix,
       name: "testsUploader"
+    });
+
+    let players = new SimpleTable(this, "tableOfPlayers", {
+      prefix: prefix, name: "Players",
+      downstream: [testUploader.function]
+    });
+
+    let testsDefinition = new SimpleTable(this, "tableOfTestsDefinition", {
+      prefix: prefix, name: "TestsDefinitions",
+      downstream: [testUploader.function]
+    });
+
+    let tests = new Exercise(this, "tableOfTests", {
+      prefix: prefix, name: "Tests", downstream: [], upStream: [testUploader.function]
     });
 
     const toBeProcessed = new ToBeProcessed(this, "toBeProcessed", {
@@ -31,6 +37,9 @@ export class KalStack extends cdk.Stack {
     });
 
     testUploader.function.addEnvironment("BUCKET", toBeProcessed.bucket.bucketName);
+    testUploader.function.addEnvironment("USERS_TABLE", players.table.tableName);
+    testUploader.function.addEnvironment("TESTS_DEFINITION_TABLE", testsDefinition.table.tableName);
+    testUploader.function.addEnvironment("TESTS_TABLE", tests.table.tableName);
 
   }
 }

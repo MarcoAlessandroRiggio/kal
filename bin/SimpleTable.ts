@@ -1,12 +1,14 @@
 import * as cdk from '@aws-cdk/core';
 import * as dynamodb from '@aws-cdk/aws-dynamodb';
+import * as lambda from "@aws-cdk/aws-lambda";
 
 export interface ExerciseProps {
     prefix: string;
     name: string;
+    downstream: Array<lambda.Function>;
 }
 
-export class Players extends cdk.Construct {
+export class SimpleTable extends cdk.Construct {
     public readonly table: dynamodb.Table;
 
     constructor(scope: cdk.Construct, id: string, props: ExerciseProps) {
@@ -19,5 +21,7 @@ export class Players extends cdk.Construct {
                 type: dynamodb.AttributeType.STRING
             },
         });
+        if (props.downstream) props.downstream.forEach(writer => this.table.grantReadData(writer));
+
     }
 }

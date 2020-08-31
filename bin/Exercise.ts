@@ -28,6 +28,6 @@ export class Exercise extends cdk.Construct {
         });
 
         if (props.downstream) props.downstream.forEach(reader => this.table.grantReadData(reader));
-        if (props.upStream) props.downstream.forEach(writer => this.table.grantWriteData(writer));
+        if (props.upStream) props.upStream.forEach(writer => this.table.grantWriteData(writer));
     }
 }
